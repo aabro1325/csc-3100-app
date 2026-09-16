@@ -20,11 +20,30 @@ function MyApp() {
       });
   }, []);
 
-  function removeOneCharacter(index) {
-    const updated = characters.filter((character, i) => {
-      return i !== index;
+  function deleteUser(id) {
+    const promise = fetch(`http://localhost:8000/users/${id}`, {
+      method: "DELETE",
     });
-    setCharacters(updated);
+
+    return promise;
+  }
+
+  function removeOneCharacter(index) {
+    const id = characters[index].id;
+    deleteUser(id)
+      .then((res) => {
+        if (res.status === 204) {
+          const updated = characters.filter((character, i) => {
+            return i !== index;
+          });
+          setCharacters(updated);
+        } else if (res.status === 404) {
+          console.log("Resource not found.");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function postUser(person) {
