@@ -51,9 +51,12 @@ const findUserByNameAndJob = (name, job) => {
   );
 };
 
+const generateId = () => Math.random().toString(36).substring(2, 8);
+
 const addUser = (user) => {
-  users["users_list"].push(user);
-  return user;
+  const newUser = { id: generateId(), ...user };
+  users["users_list"].push(newUser);
+  return newUser;
 };
 
 const deleteUserById = (id) => {
